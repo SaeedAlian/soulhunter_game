@@ -44,7 +44,7 @@ class Sprite(sprite.Sprite):
             return None
 
     @staticmethod
-    def generate_random_x_pos():
+    def __generate_random_x_pos():
         return (
             random() * (conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH * 2)
             + conf.PLATFORM_WIDTH
@@ -63,7 +63,7 @@ class Sprite(sprite.Sprite):
             x_pos = random_choice([left_pos, right_pos])
         else:
             # otherwise generate a random x position
-            x_pos = self.generate_random_x_pos()
+            x_pos = self.__generate_random_x_pos()
 
         return x_pos
 
