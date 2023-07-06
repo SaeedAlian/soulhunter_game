@@ -26,7 +26,7 @@ class Game:
 
         # This variable can move the platforms in
         # the y direction with the game speed
-        self._platform_move_y = 0
+        self.__platform_move_y = 0
 
     def increment_speed(self):
         if self.speed < conf.MAX_GAME_SPEED:
@@ -38,15 +38,15 @@ class Game:
 
     def draw_platforms(self):
         # Increase the y factor by the game speed
-        self._platform_move_y += self.speed
+        self.__platform_move_y += self.speed
 
         # but we need to reset the platform_move_y
         # variable to 0 because if the platform_move_y
         # becomes greater than the platform height it will
         # overlap the previous drawings of
         # platform so we need to reset this to 0
-        if self._platform_move_y >= conf.PLATFORM_HEIGHT:
-            self._platform_move_y = 0
+        if self.__platform_move_y >= conf.PLATFORM_HEIGHT:
+            self.__platform_move_y = 0
 
         # Draw side blocks :
         # we will start the y position from
@@ -57,13 +57,13 @@ class Game:
             # Right platform
             self.surface.blit(
                 pygame.transform.flip(assets.PLATFORM, flip_x=True, flip_y=False),
-                (conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH, y + self._platform_move_y),
+                (conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH, y + self.__platform_move_y),
             )
 
             # Left platform
             self.surface.blit(
                 assets.PLATFORM,
-                (0, y + self._platform_move_y),
+                (0, y + self.__platform_move_y),
             )
 
     def spawn_sprite(self):
