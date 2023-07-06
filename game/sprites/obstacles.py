@@ -47,3 +47,6 @@ class DeadBush(Obstacle):
 
     def __init__(self):
         super().__init__([DEAD_BUSH_MODEL])
+
+
+obstacles = [SingleBlock, DoubleBlock, Spike, DeadBush]

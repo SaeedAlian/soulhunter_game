@@ -72,3 +72,6 @@ class Sprint(Item):
 
     def __init__(self):
         super().__init__([SPRINT_ITEM_MODEL])
+
+
+items = [Coin, CoinBag, Emerald, Ruby, Sapphire, Health, Sprint]

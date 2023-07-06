@@ -3,8 +3,8 @@ from . import assets
 from config import conf
 from .player import Player
 from .sprites.sprite import Sprite
-from .sprites.obstacles import DoubleBlock, SingleBlock, Spike, DeadBush
-from .sprites.items import Coin, CoinBag, Emerald, Health, Ruby, Sapphire, Sprint
+from .sprites.obstacles import obstacles
+from .sprites.items import items
 from random import choices as random_choices, randint
 
 
@@ -12,19 +12,7 @@ class Game:
     SPRITES = pygame.sprite.Group()
     MAXIMUM_SPRITES = 1
     SPRITE_DISTANCE_FACTOR = conf.MAX_SPRITES_DISTANCE_FACTOR
-    SPRITE_CLASSES: list[Sprite] = [
-        SingleBlock,
-        DoubleBlock,
-        Spike,
-        DeadBush,
-        Coin,
-        CoinBag,
-        Emerald,
-        Health,
-        Ruby,
-        Sapphire,
-        Sprint,
-    ]
+    SPRITE_CLASSES: list[Sprite] = items + obstacles
     SPRITE_DROP_WEIGHTS: list[float] = [
         c.DROP_CHANCE if c.DROP_CHANCE else 1 for c in SPRITE_CLASSES
     ]
