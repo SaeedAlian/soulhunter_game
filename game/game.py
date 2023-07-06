@@ -8,22 +8,30 @@ class Game:
         self.surface = surface
         self.speed = conf.GAME_SPEED
 
-        """
-          This variable can move the platforms in
-          the y direction with the game speed
-        """
+        # This variable can move the platforms in
+        # the y direction with the game speed
         self._platform_move_y = 0
 
     def draw_menu(self):
         pass
 
     def draw_platforms(self):
-        # increase the y factor by the game speed
+        # Increase the y factor by the game speed
         self._platform_move_y += self.speed
 
+        # but we need to reset the platform_move_y
+        # variable to 0 because if the platform_move_y
+        # becomes greater than the platform height it will
+        # overlap the previous drawings of
+        # platform so we need to reset this to 0
         if self._platform_move_y >= conf.PLATFORM_HEIGHT:
             self._platform_move_y = 0
 
+        # Draw side blocks :
+        # we will start the y position from
+        # the negative of platform height
+        # and increase it by platform height
+        # itself until we reach screen height
         for y in range(-conf.PLATFORM_HEIGHT, conf.SCREEN_HEIGHT, conf.PLATFORM_HEIGHT):
             # Right platform
             self.surface.blit(
@@ -41,6 +49,7 @@ class Game:
         self.surface.blit(assets.GAME_BG, (0, 0))
 
     def update_screen(self):
+        # Update game screen
         self.draw_game_bg()
         self.draw_platforms()
 
