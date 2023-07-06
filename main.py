@@ -1,6 +1,7 @@
 import pygame
 from config.sizes import SCREEN_WIDTH, SCREEN_HEIGHT
 from config.game import FPS
+from game.game import Game
 
 
 def main():
@@ -9,9 +10,12 @@ def main():
     pygame.display.set_caption("Soul Hunter")
     clock = pygame.time.Clock()
 
+    game = Game()
+
     while True:
-        clock.tick(FPS)
+        game.get_events()
         pygame.display.update()
+        clock.tick(FPS)
 
 
 if __name__ == "__main__":
