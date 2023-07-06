@@ -27,41 +27,37 @@ class Item(Sprite):
 class Coin(Item):
     DROP_CHANCE = conf.COIN_DROP_CHANCE
 
-    def __init__(self):
-        self.count = 1
-        super().__init__(COIN_MODELS, animation_speed=0.2)
+    def __init__(self, models: list[Surface] = COIN_MODELS, animation_speed=0, count=1):
+        self.count = count
+        super().__init__(models, animation_speed=animation_speed)
 
 
-class CoinBag(Item):
+class CoinBag(Coin):
     DROP_CHANCE = conf.COIN_BAG_DROP_CHANCE
 
     def __init__(self):
-        self.count = 10
-        super().__init__([COIN_BAG_MODEL])
+        super().__init__([COIN_BAG_MODEL], count=10)
 
 
-class Emerald(Item):
+class Emerald(Coin):
     DROP_CHANCE = conf.EMERALD_DROP_CHANCE
 
     def __init__(self):
-        self.count = 20
-        super().__init__([EMERALD_MODEL])
+        super().__init__([EMERALD_MODEL], count=20)
 
 
-class Ruby(Item):
+class Ruby(Coin):
     DROP_CHANCE = conf.RUBY_DROP_CHANCE
 
     def __init__(self):
-        self.count = 30
-        super().__init__([RUBY_MODEL])
+        super().__init__([RUBY_MODEL], count=30)
 
 
-class Sapphire(Item):
+class Sapphire(Coin):
     DROP_CHANCE = conf.SAPPHIRE_DROP_CHANCE
 
     def __init__(self):
-        self.count = 25
-        super().__init__([SAPPHIRE_MODEL])
+        super().__init__([SAPPHIRE_MODEL], count=25)
 
 
 class Health(Item):
