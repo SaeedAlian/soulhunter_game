@@ -1,0 +1,5 @@
+.venv
+.vscode
+todos.txt
+
+/**/**/__pycache__
