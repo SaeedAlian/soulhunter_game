@@ -86,3 +86,13 @@ for i in range(1, 7):
             -90,
         )
     )
+
+# Dead bush
+DEAD_BUSH_MODEL = transform.rotate(
+    transform.scale(
+        image.load("assets/environment/dead_bush/1.png"),
+        (conf.DEAD_BUSH_WIDTH, conf.DEAD_BUSH_HEIGHT),
+    ),
+    -90,
+)
+

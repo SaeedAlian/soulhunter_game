@@ -1,7 +1,12 @@
 from .sprite import Sprite
 from pygame import Surface
 from config import conf
-from ..assets import DOUBLE_BLOCK_MODEL, SINGLE_BLOCK_MODEL, SPIKE_MODELS
+from ..assets import (
+    DOUBLE_BLOCK_MODEL,
+    SINGLE_BLOCK_MODEL,
+    SPIKE_MODELS,
+    DEAD_BUSH_MODEL,
+)
 
 
 class Obstacle(Sprite):
@@ -35,3 +40,10 @@ class Spike(Obstacle):
 
     def __init__(self):
         super().__init__(SPIKE_MODELS, 0.1)
+
+
+class DeadBush(Obstacle):
+    DROP_CHANCE = conf.DEAD_BUSH_DROP_CHANCE
+
+    def __init__(self):
+        super().__init__([DEAD_BUSH_MODEL])
