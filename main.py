@@ -1,6 +1,5 @@
 import pygame
-from config.sizes import SCREEN_WIDTH, SCREEN_HEIGHT
-from config.game import FPS
+from config.conf import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 from game.game import Game
 
 
