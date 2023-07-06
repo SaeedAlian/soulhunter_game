@@ -1,12 +1,12 @@
 import pygame, sys
 from . import assets
-from config import game as game_conf, sizes
+from config import conf
 
 
 class Game:
     def __init__(self, surface: pygame.Surface) -> None:
         self.surface = surface
-        self.speed = game_conf.GAME_SPEED
+        self.speed = conf.GAME_SPEED
 
         """
           This variable can move the platforms in
@@ -21,27 +21,14 @@ class Game:
         # increase the y factor by the game speed
         self._platform_move_y += self.speed
 
-        """
-          but we need to reset the platform_move_y variable to 0
-          because if the platform_move_y becomes greater than the
-          platform height it will overlap the previous drawings of
-          platform so we need to reset this to 0
-        """
-        if self._platform_move_y >= sizes.PLATFORM_HEIGHT:
+        if self._platform_move_y >= conf.PLATFORM_HEIGHT:
             self._platform_move_y = 0
 
-        """ 
-          Draw side blocks :
-          we will start the y position from the negative of platform height
-          and increase it by platform height itself until we reach screen height
-        """
-        for y in range(
-            -sizes.PLATFORM_HEIGHT, sizes.SCREEN_HEIGHT, sizes.PLATFORM_HEIGHT
-        ):
+        for y in range(-conf.PLATFORM_HEIGHT, conf.SCREEN_HEIGHT, conf.PLATFORM_HEIGHT):
             # Right platform
             self.surface.blit(
                 pygame.transform.flip(assets.PLATFORM, flip_x=True, flip_y=False),
-                (sizes.SCREEN_WIDTH - sizes.PLATFORM_WIDTH, y + self._platform_move_y),
+                (conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH, y + self._platform_move_y),
             )
 
             # Left platform
