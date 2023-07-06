@@ -120,6 +120,7 @@ class Player:
             (to_left and self.side == "left") or (to_right and self.side == "right")
         ):
             self.is_jumping = True
+            self.is_attacking = False
             self.model_index = 0
             self.angle = 0
 
