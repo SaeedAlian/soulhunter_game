@@ -3,6 +3,11 @@
 DB_FILEPATH = "records.csv"
 
 
+### SOUNDS
+
+MAIN_MENU_THEME_PATH = "assets/sounds/main_menu_theme.mp3"
+GAME_THEME_PATH = "assets/sounds/game_theme.mp3"
+
 ### SIZES
 
 # Screen

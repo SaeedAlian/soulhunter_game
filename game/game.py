@@ -54,6 +54,9 @@ class Game:
         # the sprint action has finished
         self.__speed_before_sprint = None
 
+        # Load and play the main menu theme
+        self.load_and_play_music(conf.MAIN_MENU_THEME_PATH)
+
     @property
     # is_running shows that the game is not over or paused
     def is_running(self):
@@ -128,6 +131,10 @@ class Game:
             ),
             icon_rect,
         )
+
+    def load_and_play_music(self, music_path: str):
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.play(loops=-1)
 
     def update_speed(self):
         # Increase the speed by the sprint factor
@@ -211,9 +218,11 @@ class Game:
     def start(self):
         self.reset()
         self.is_started = True
+        self.load_and_play_music(conf.GAME_THEME_PATH)
 
     def finish(self):
         self.is_started = False
+        self.load_and_play_music(conf.MAIN_MENU_THEME_PATH)
 
     def quit(self):
         pygame.quit()
@@ -611,6 +620,12 @@ class Game:
 
             # Draw pause button
             self.draw_pause_button()
+
+    def update_music(self):
+        if self.is_muted or self.is_game_over:
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
 
     def get_events(self):
         for event in pygame.event.get():
