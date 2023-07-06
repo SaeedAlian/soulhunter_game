@@ -110,7 +110,7 @@ class Sprite(sprite.Sprite):
 
             # and if the index reaches the last element
             # in the models list
-            if self.model_index >= len(self.models):
+            if self.model_index >= len(self.models) - 1:
                 # reset the index
                 self.model_index = 0
 
