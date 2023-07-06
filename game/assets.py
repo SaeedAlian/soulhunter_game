@@ -148,6 +148,18 @@ SPRINT_ITEM_MODEL = transform.scale(
     (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
 )
 
+# Score boost item
+SCORE_BOOST_ITEM_MODEL = transform.scale(
+    image.load(f"assets/items/score_boost/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
+# Shield item
+SHIELD_ITEM_MODEL = transform.scale(
+    image.load(f"assets/items/shield/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
 # Heart
 FULL_HEART_MODEL = transform.scale(
     image.load(f"assets/items/heart/full.png"),

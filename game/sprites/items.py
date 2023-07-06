@@ -9,6 +9,8 @@ from ..assets import (
     FULL_HEART_MODEL,
     RUBY_MODEL,
     SPRINT_ITEM_MODEL,
+    SCORE_BOOST_ITEM_MODEL,
+    SHIELD_ITEM_MODEL,
 )
 
 
@@ -76,4 +78,18 @@ class Sprint(Item):
         super().__init__([SPRINT_ITEM_MODEL])
 
 
-items = [Coin, CoinBag, Emerald, Ruby, Sapphire, Health, Sprint]
+class ScoreBoost(Item):
+    DROP_CHANCE = conf.SCORE_BOOST_DROP_CHANCE
+
+    def __init__(self):
+        super().__init__([SCORE_BOOST_ITEM_MODEL])
+
+
+class Shield(Item):
+    DROP_CHANCE = conf.SHIELD_DROP_CHANCE
+
+    def __init__(self):
+        super().__init__([SHIELD_ITEM_MODEL])
+
+
+items = [Coin, CoinBag, Emerald, Ruby, Sapphire, Health, Sprint, ScoreBoost, Shield]
