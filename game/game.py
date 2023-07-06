@@ -70,23 +70,49 @@ class Game:
         self.SPRITES.add(sprite)
 
     def update_sprites(self):
+        # If the sprites on the screen was less than
+        # the maximum value
         if len(self.SPRITES) < self.MAXIMUM_SPRITES:
+            # we will set the add sprite flag to true
             can_add_sprite = True
 
-            for sprite in self.SPRITES:
-                if sprite.rect.top < sprite.rect.height * self.SPRITE_DISTANCE_FACTOR:
+            # and if there is a sprite
+            if self.SPRITES:
+                last_sprite = self.SPRITES.sprites()[-1]
+
+                # and if there is not enough space after the
+                # last sprite, we won't spawn another sprite,
+                # and the distance factor will be calculated with
+                # a random value between current distance factor
+                # and maximum distance factor
+                if last_sprite.y + last_sprite.height < last_sprite.height * randint(
+                    int(self.SPRITE_DISTANCE_FACTOR), conf.MAX_SPRITES_DISTANCE_FACTOR
+                ):
                     can_add_sprite = False
 
+            # Add sprite if we can
             if can_add_sprite:
                 self.spawn_sprite()
 
+        # Loop through all sprites
         for sprite in self.SPRITES:
+            # Draw, update and animate
             sprite.draw(self.surface)
             sprite.update(self.speed)
             sprite.change_animation()
 
-            if sprite.rect.y > conf.SCREEN_HEIGHT + conf.PLATFORM_HEIGHT:
+            # If the sprite went out of the screen
+            # we will delete the sprite and remove it
+            if sprite.y > conf.SCREEN_HEIGHT + conf.PLATFORM_HEIGHT:
                 sprite.kill()
+
+        # Increase max sprites on screen value
+        if self.MAXIMUM_SPRITES < conf.MAX_SPRITES_ON_SCREEN:
+            self.MAXIMUM_SPRITES += conf.SPRITES_ON_SCREEN_INCREMENT_FACTOR
+
+        # Decrease sprite distance factor value
+        if self.SPRITE_DISTANCE_FACTOR > conf.MIN_SPRITES_DISTANCE_FACTOR:
+            self.SPRITE_DISTANCE_FACTOR -= conf.SPRITES_DISTANCE_DECREMENT_FACTOR
 
     def draw_game_bg(self):
         self.surface.blit(assets.GAME_BG, (0, 0))

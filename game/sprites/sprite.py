@@ -20,11 +20,11 @@ class Sprite(sprite.Sprite):
         self.animation_speed = animation_speed
         self.y_speed = y_speed
         self.is_on_edges = is_on_edges
+        self.width = self.current_model.get_width()
+        self.height = self.current_model.get_height()
 
-        self.rect = self.current_model.get_rect()
-
-        self.rect.y = -self.rect.height * 2
-        self.rect.x = self.__set_x_pos()
+        self.x = self.__set_x_pos()
+        self.y = -self.height * 2.0
 
     @property
     def current_model(self):
@@ -36,13 +36,9 @@ class Sprite(sprite.Sprite):
         # on which side, the right or
         # the left. If we cut the screen in half
         # then the sides are obvious
-        if conf.PLATFORM_WIDTH <= self.rect.x <= conf.SCREEN_WIDTH / 2:
+        if conf.PLATFORM_WIDTH <= self.x <= conf.SCREEN_WIDTH / 2:
             return "left"
-        elif (
-            conf.SCREEN_WIDTH / 2
-            < self.rect.x
-            <= conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH
-        ):
+        elif conf.SCREEN_WIDTH / 2 < self.x <= conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH:
             return "right"
         else:
             return None
@@ -60,7 +56,7 @@ class Sprite(sprite.Sprite):
             # then pick a position between the
             # right pos or the left pos coordinates
 
-            right_pos = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.rect.width
+            right_pos = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.width
 
             left_pos = conf.PLATFORM_FLOOR_WIDTH
 
@@ -72,23 +68,28 @@ class Sprite(sprite.Sprite):
         return x_pos
 
     def __update_rect(self):
-        # This method will change the model rect
-        # and set the previous coordinates
-        # to the new rect coordinates
+        # First we get the new model width
+        new_width = self.current_model.get_width()
+        # and its height
+        new_height = self.current_model.get_height()
 
-        prev_x = self.rect.x
-        prev_y = self.rect.y
-        self.rect = self.current_model.get_rect()
+        # If new height was not equal to the prev height
+        if self.height != new_height:
+            self.height = new_height
 
-        # If it's on the edges then the x must be set from the
-        # new rect width so we need to call __set_x_pos method
-        # otherwise we set the new_x to the previous x position
-        self.rect.x = prev_x
+        # If new width was not equal to the prev width
+        if self.width != new_width:
+            # reset the width
+            self.width = new_width
 
-        self.rect.y = prev_y
+            # and if the sprite was on the right side
+            if self.side == "right":
+                # change the x pos because it is the
+                # only position that depends on model width
+                self.x = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.width
 
     def update(self, game_speed: float):
-        self.rect.y += game_speed + self.y_speed
+        self.y += game_speed + self.y_speed
 
     def draw(self, surface: Surface):
         surface.blit(
@@ -97,7 +98,7 @@ class Sprite(sprite.Sprite):
                 self.side == "right",
                 False,
             ),
-            self.rect,
+            (self.x, self.y),
         )
 
     def change_animation(self):
