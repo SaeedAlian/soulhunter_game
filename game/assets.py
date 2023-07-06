@@ -25,12 +25,12 @@ PLAYER_RUN_MODELS: list[Surface] = []
 PLAYER_ATTACK_MODELS: list[Surface] = []
 PLAYER_JUMP_MODELS = [
     transform.scale(
-        image.load(f"assets/sprites/player/jump/jump.png"),
+        image.load(f"assets/sprites/player/jump/1.png"),
         (conf.PLAYER_WIDTH, conf.PLAYER_HEIGHT),
     )
 ]
 
-for i in range(1, 8):
+for i in range(1, 7):
     PLAYER_RUN_MODELS.append(
         transform.scale(
             image.load(f"assets/sprites/player/run/{i}.png"),
@@ -38,7 +38,7 @@ for i in range(1, 8):
         )
     )
 
-for i in range(1, 6):
+for i in range(1, 7):
     PLAYER_ATTACK_MODELS.append(
         transform.scale(
             image.load(f"assets/sprites/player/attack/{i}.png"),
@@ -51,7 +51,7 @@ PLAYER_HIT_EFFECTS: list[Surface] = []
 PLAYER_SHIELD_EFFECTS: list[Surface] = [
     transform.scale(
         image.load(f"assets/sprites/player/shield/1.png"),
-        (conf.PLAYER_WIDTH, conf.PLAYER_HEIGHT),
+        (conf.PLAYER_WIDTH * 1.5, conf.PLAYER_HEIGHT * 1.5),
     )
 ]
 

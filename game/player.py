@@ -73,6 +73,35 @@ class Player:
     def jump_speed(self):
         return self.__jump_speed * 2 if self.is_sprinting else self.__jump_speed
 
+    def __rotate_model(self, model: Surface):
+        return transform.flip(
+            transform.rotate(model, self.angle),
+            self.side == "left" or self.jump_dir == "left",
+            False,
+        )
+
+    def __draw_player(self, surface: Surface):
+        surface.blit(
+            self.__rotate_model(self.current_model),
+            self.rect,
+        )
+
+    def __draw_shield(self, surface: Surface):
+        current_shield_model = self.__rotate_model(self.current_shield_effect)
+        current_shield_model_rect = current_shield_model.get_rect()
+        current_shield_model_rect.center = self.rect.center
+
+        surface.blit(
+            current_shield_model,
+            current_shield_model_rect,
+        )
+
+    def __draw_hit(self, surface: Surface):
+        surface.blit(
+            self.__rotate_model(self.current_hit_effect),
+            self.rect,
+        )
+
     def jump(self, to_left: bool, to_right: bool):
         # If we are on the left side and want to
         # jump to left or the opposite, we cannot do it
@@ -150,23 +179,18 @@ class Player:
                 self.disable_jump()
 
     def draw(self, surface: Surface):
-        # Draw player model
-        surface.blit(
-            transform.flip(
-                transform.rotate(self.current_model, self.angle),
-                self.side == "left" or self.jump_dir == "left",
-                False,
-            ),
-            self.rect,
-        )
-
         # Draw shield effect
         if self.is_shielded:
-            surface.blit(self.current_shield_effect, self.rect)
+            self.__draw_player(surface)
+            self.__draw_shield(surface)
 
         # Draw hit effect
-        if self.is_hit:
-            surface.blit(self.current_hit_effect, self.rect)
+        elif self.is_hit:
+            self.__draw_hit()
+
+        # Draw player
+        else:
+            self.__draw_player(surface)
 
     def change_animation(self, current_game_speed: float):
         # If there is more than one image on the player
@@ -177,7 +201,7 @@ class Player:
             self.model_index += (
                 conf.PLAYER_ATTACK_SPEED
                 if self.is_attacking
-                else current_game_speed / 10
+                else current_game_speed * conf.PLAYER_RUN_ANIMATION_SPEED
             )
 
             # and if the index reaches the last element
@@ -198,14 +222,14 @@ class Player:
         # models in the previous block
 
         if self.is_hit and len(self.hit_effects) > 1:
-            self.hit_effect_index += 0.2
+            self.hit_effect_index += conf.PLAYER_HIT_ANIMATION_SPEED
 
             if self.hit_effect_index >= len(self.hit_effects):
                 self.hit_effect_index = 0
                 self.is_hit = False
 
         if self.is_shielded and len(self.shield_effects) > 1:
-            self.shield_effect_index += 0.1
+            self.shield_effect_index += conf.PLAYER_SHIELD_ANIMATION_SPEED
 
             if self.shield_effect_index >= len(self.shield_effects):
                 self.shield_effect_index = 0
