@@ -76,7 +76,7 @@ DOUBLE_BLOCK_MODEL = transform.scale(
 # Spike models
 SPIKE_MODELS: list[Surface] = []
 
-for i in range(1, 7):
+for i in range(1, 13):
     SPIKE_MODELS.append(
         transform.rotate(
             transform.scale(
