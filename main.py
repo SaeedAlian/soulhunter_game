@@ -10,10 +10,11 @@ def main():
     pygame.display.set_caption("Soul Hunter")
     clock = pygame.time.Clock()
 
-    game = Game()
+    game = Game(screen)
 
     while True:
         game.get_events()
+        game.update_screen()
         pygame.display.update()
         clock.tick(FPS)
 
