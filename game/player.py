@@ -65,7 +65,7 @@ class Player:
         elif self.rect.centerx >= conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH:
             return "right"
         else:
-            "center"
+            return "center"
 
     @property
     def jump_speed(self):
