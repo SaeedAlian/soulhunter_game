@@ -19,12 +19,17 @@ class Game:
     def __init__(self, surface: pygame.Surface) -> None:
         self.surface = surface
         self.speed = conf.GAME_SPEED
-        self.player_jump_speed = self.speed * 3
+        self.player_jump_speed = self.speed * conf.PLAYER_JUMP_SPEED_FACTOR
         self.player = Player(self.player_jump_speed)
 
         # This variable can move the platforms in
         # the y direction with the game speed
         self._platform_move_y = 0
+
+    def increment_speed(self):
+        if self.speed < conf.MAX_GAME_SPEED:
+            self.speed += conf.GAME_SPEED_INCREMENT_FACTOR
+            self.player_jump_speed = self.speed * conf.PLAYER_JUMP_SPEED_FACTOR
 
     def draw_menu(self):
         pass
@@ -93,11 +98,14 @@ class Game:
 
         # Update player
         self.player.draw(self.surface)
-        self.player.update()
+        self.player.update(self.player_jump_speed)
         self.player.change_animation(self.speed)
 
         # Update sprites
         self.update_sprites()
+
+        # Increment game speed
+        self.increment_speed()
 
     def get_events(self):
         for event in pygame.event.get():
