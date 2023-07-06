@@ -4,7 +4,7 @@ from config import conf
 from .player import Player
 from .sprites.sprite import Sprite
 from .sprites.obstacles import DoubleBlock, SingleBlock, Spike, DeadBush
-from random import choices as random_choices
+from random import choices as random_choices, randint
 
 
 class Game:
