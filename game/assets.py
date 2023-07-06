@@ -66,7 +66,7 @@ PLAYER_SHIELD_EFFECTS: list[Surface] = [
     )
 ]
 
-for i in range(1, 4):
+for i in range(1, 6):
     PLAYER_HIT_EFFECTS.append(
         transform.scale(
             image.load(f"assets/sprites/player/hit/{i}.png"),
