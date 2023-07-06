@@ -1,3 +1,8 @@
+### DB
+
+DB_FILEPATH = "records.csv"
+
+
 ### SIZES
 
 # Screen

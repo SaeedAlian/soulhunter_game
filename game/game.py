@@ -9,6 +9,8 @@ from .sprites.enemies import enemies, Enemy
 from .ui.button import Button
 from .ui.text import Text
 from .ui.prompt import Prompt
+from db.db import DB
+from db.record import Record
 from random import choices as random_choices, randint
 
 
@@ -31,6 +33,7 @@ class Game:
         self.is_started = False
         self.is_paused = False
         self.is_game_over = False
+        self.is_reached_high_score = False
         self.coins = 0
         self.kills = 0
         self.score = 0
@@ -38,6 +41,8 @@ class Game:
         self.is_muted = False
 
         self.player = Player(self.player_jump_speed)
+
+        self.db = DB(conf.DB_FILEPATH)
 
         # This variable can move the platforms in
         # the y direction with the game speed
@@ -172,6 +177,16 @@ class Game:
         self.is_paused = False
 
     def game_over(self):
+        # Save record
+        new_record = Record(score=self.score, kills=self.kills, coins=self.coins)
+
+        self.db.add_record(new_record)
+
+        # Check for higher record
+        # If there is no higher record then it is a high score
+        if not self.db.is_there_any_higher_records(new_record):
+            self.is_reached_high_score = True
+
         self.is_game_over = True
 
     def reset(self):
@@ -181,6 +196,7 @@ class Game:
         self.is_started = False
         self.is_paused = False
         self.is_game_over = False
+        self.is_reached_high_score = False
         self.speed = conf.GAME_SPEED
         self.__platform_move_y = 0
         self.__speed_before_sprint = None
@@ -327,10 +343,14 @@ class Game:
 
         # Create prompt
         prompt = Prompt(
-            assets.PROMPT_YOU_LOST_TITLE,
+            title=assets.PROMPT_NEW_HIGH_SCORE_TITLE
+            if self.is_reached_high_score
+            else assets.PROMPT_YOU_LOST_TITLE,
             buttons=[retry_btn, exit_btn],
             texts=[
-                "You are lost !",
+                "YOU HAVE REACHED A HIGH SCORE !"
+                if self.is_reached_high_score
+                else "You are lost !",
                 f"Your score : {self.score}",
                 "Press R to retry",
                 "Press ESC to exit",

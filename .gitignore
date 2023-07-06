@@ -1,5 +1,6 @@
 .venv
 .vscode
 todos.txt
+records.csv
 
 /**/**/__pycache__
