@@ -15,13 +15,12 @@ class Player:
         self.model_index = 0
         self.shield_effect_index = 0
         self.hit_effect_index = 0
-        self.model_index = 0
         self.is_jumping = False
         self.is_attacking = False
         self.is_shielded = False
         self.is_sprinting = False
         self.is_hit = False
-        self.lives = 3
+        self.lives = conf.PLAYER_MAX_HEATH
         self.jump_dir = None
         self.angle = 90
         self.shield_effects = PLAYER_SHIELD_EFFECTS
@@ -160,6 +159,10 @@ class Player:
             self.is_hit = True
             self.lives -= 1
 
+    def heal(self):
+        if self.lives < conf.PLAYER_MAX_HEATH:
+            self.lives += 1
+
     def sprint(self):
         self.is_sprinting = True
         self.shield()
@@ -218,7 +221,7 @@ class Player:
 
             # and if the index reaches the last element
             # in the models list
-            if self.model_index >= len(self.models):
+            if self.model_index >= len(self.models) - 1:
                 # disable attacking if he is attacking
                 # because the attacking animation is finished
                 if self.is_attacking:
@@ -236,12 +239,12 @@ class Player:
         if self.is_hit and len(self.hit_effects) > 1:
             self.hit_effect_index += conf.PLAYER_HIT_ANIMATION_SPEED
 
-            if self.hit_effect_index >= len(self.hit_effects):
+            if self.hit_effect_index >= len(self.hit_effects) - 1:
                 self.hit_effect_index = 0
                 self.is_hit = False
 
         if self.is_shielded and len(self.shield_effects) > 1:
             self.shield_effect_index += conf.PLAYER_SHIELD_ANIMATION_SPEED
 
-            if self.shield_effect_index >= len(self.shield_effects):
+            if self.shield_effect_index >= len(self.shield_effects) - 1:
                 self.shield_effect_index = 0
