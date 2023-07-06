@@ -5,6 +5,7 @@ from .player import Player
 from .sprites.sprite import Sprite
 from .sprites.obstacles import obstacles
 from .sprites.items import items
+from .sprites.enemies import enemies
 from random import choices as random_choices, randint
 
 
@@ -12,7 +13,7 @@ class Game:
     SPRITES = pygame.sprite.Group()
     MAXIMUM_SPRITES = 1
     SPRITE_DISTANCE_FACTOR = conf.MAX_SPRITES_DISTANCE_FACTOR
-    SPRITE_CLASSES: list[Sprite] = items + obstacles
+    SPRITE_CLASSES: list[Sprite] = items + obstacles + enemies
     SPRITE_DROP_WEIGHTS: list[float] = [
         c.DROP_CHANCE if c.DROP_CHANCE else 1 for c in SPRITE_CLASSES
     ]
