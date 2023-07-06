@@ -14,6 +14,58 @@ MENU_BG = transform.scale(
     image.load("assets/ui/menu_bg.png"), (conf.SCREEN_WIDTH, conf.SCREEN_HEIGHT)
 )
 
+# Logo
+LOGO = transform.scale(
+    image.load("assets/ui/logo.png"), (conf.LOGO_WIDTH, conf.LOGO_HEIGHT)
+)
+
+# Game stats UI
+SCORE_STATS_ICON = transform.scale(
+    image.load("assets/ui/stats/score.png"),
+    (conf.GAME_STATS_ICON_SIZE, conf.GAME_STATS_ICON_SIZE),
+)
+
+COINS_STATS_ICON = transform.scale(
+    image.load("assets/ui/stats/coins.png"),
+    (conf.GAME_STATS_ICON_SIZE, conf.GAME_STATS_ICON_SIZE),
+)
+
+KILLS_STATS_ICON = transform.scale(
+    image.load("assets/ui/stats/kills.png"),
+    (conf.GAME_STATS_ICON_SIZE, conf.GAME_STATS_ICON_SIZE),
+)
+
+LIVES_STATS_ICON = transform.scale(
+    image.load("assets/ui/stats/lives.png"),
+    (conf.GAME_STATS_ICON_SIZE, conf.GAME_STATS_ICON_SIZE),
+)
+
+# Buttons
+HOME_BUTTON = image.load("assets/ui/buttons/home.png")
+PAUSE_BUTTON = image.load("assets/ui/buttons/pause.png")
+PLAY_BUTTON = image.load("assets/ui/buttons/play.png")
+RETRY_BUTTON = image.load("assets/ui/buttons/retry.png")
+ACTIVE_SOUND_BUTTON = image.load("assets/ui/buttons/active_sound.png")
+DEACTIVE_SOUND_BUTTON = image.load("assets/ui/buttons/deactive_sound.png")
+
+# Prompt UI
+PROMPT_BOARD = image.load("assets/ui/prompt/board.png")
+
+PROMPT_NEW_HIGH_SCORE_TITLE = transform.scale(
+    image.load("assets/ui/prompt/new_high_score_title.png"),
+    (conf.PROMPT_TITLE_WIDTH, conf.PROMPT_TITLE_HEIGHT),
+)
+
+PROMPT_PAUSE_TITLE = transform.scale(
+    image.load("assets/ui/prompt/pause_title.png"),
+    (conf.PROMPT_TITLE_WIDTH, conf.PROMPT_TITLE_HEIGHT),
+)
+
+PROMPT_YOU_LOST_TITLE = transform.scale(
+    image.load("assets/ui/prompt/you_lost_title.png"),
+    (conf.PROMPT_TITLE_WIDTH, conf.PROMPT_TITLE_HEIGHT),
+)
+
 # Game objects
 PLATFORM = transform.scale(
     transform.rotate(image.load("assets/environment/ground/1.png"), -90),

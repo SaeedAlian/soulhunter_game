@@ -6,6 +6,9 @@ from .sprites.sprite import Sprite
 from .sprites.obstacles import obstacles
 from .sprites.items import items, Coin, Sprint, Health, Shield, ScoreBoost
 from .sprites.enemies import enemies, Enemy
+from .ui.button import Button
+from .ui.text import Text
+from .ui.prompt import Prompt
 from random import choices as random_choices, randint
 
 
@@ -32,6 +35,7 @@ class Game:
         self.kills = 0
         self.score = 0
         self.is_score_boosted = False
+        self.is_muted = False
 
         self.player = Player(self.player_jump_speed)
 
@@ -60,6 +64,21 @@ class Game:
     def player_jump_speed(self):
         return self.speed * conf.PLAYER_JUMP_SPEED_FACTOR
 
+    @property
+    def active_ability_icons(self):
+        icons = []
+
+        if self.is_score_boosted:
+            icons.append(assets.SCORE_BOOST_ITEM_MODEL)
+
+        if self.player.is_shielded and not self.player.is_sprinting:
+            icons.append(assets.SHIELD_ITEM_MODEL)
+
+        if self.player.is_sprinting:
+            icons.append(assets.SPRINT_ITEM_MODEL)
+
+        return icons
+
     def __shield_event(self, duration: int):
         self.player.shield()
         pygame.time.set_timer(self.SHIELD_DISABLE_EVENT, duration)
@@ -71,6 +90,39 @@ class Game:
     def __score_boost_event(self, duration: int):
         self.active_score_boost()
         pygame.time.set_timer(self.SCORE_BOOST_DISABLE_EVENT, duration)
+
+    def __draw_game_stats_ui(
+        self,
+        font: pygame.font.Font,
+        text: str,
+        icon: pygame.Surface,
+        position: tuple[float],
+    ):
+        text_surface = font.render(text, True, conf.GAME_STATS_TEXT_COLOR)
+
+        icon_rect = icon.get_rect()
+        text_rect = text_surface.get_rect()
+
+        icon_rect.center = (position[0] + icon_rect.width, position[1])
+
+        text_rect.center = (
+            icon_rect.centerx + (icon_rect.width * 1.1),
+            icon_rect.centery,
+        )
+
+        self.surface.blit(icon, icon_rect)
+        self.surface.blit(text_surface, text_rect)
+
+    def __draw_ability_icon(self, icon: pygame.Surface, position: tuple[float]):
+        icon_rect = icon.get_rect()
+        icon_rect.center = (position[0] - icon_rect.width, position[1])
+
+        self.surface.blit(
+            pygame.transform.scale(
+                icon, (conf.GAME_STATS_ICON_SIZE, conf.GAME_STATS_ICON_SIZE)
+            ),
+            icon_rect,
+        )
 
     def update_speed(self):
         # Increase the speed by the sprint factor
@@ -148,6 +200,9 @@ class Game:
         pygame.quit()
         sys.exit()
 
+    def toggle_mute(self):
+        self.is_muted = not self.is_muted
+
     def shield_action(self):
         # Active shield action
         self.__shield_event(conf.SHIELD_ACTION_DURATION_IN_MS)
@@ -163,13 +218,131 @@ class Game:
         self.__shield_event(conf.SPRINT_ACTION_DURATION_IN_MS + 5000)
 
     def draw_main_menu(self):
-        pass
+        font = pygame.font.Font(None, conf.MAIN_MENU_FONT_SIZE)
+
+        # Draw background
+        self.surface.blit(assets.MENU_BG, (0, 0))
+
+        # Set x center position
+        x_center_pos = conf.SCREEN_WIDTH / 2
+
+        # Set logo rect position
+        logo_rect = assets.LOGO.get_rect()
+        logo_rect.center = (x_center_pos, conf.SCREEN_HEIGHT / 7)
+
+        # Draw logo
+        self.surface.blit(assets.LOGO, logo_rect)
+
+        # Set play button
+        play_btn = Button(
+            x=x_center_pos,
+            y=logo_rect.y + logo_rect.height + 80,
+            sizes=(150, 150),
+            icon=assets.PLAY_BUTTON,
+            centerized=True,
+        )
+
+        play_btn.draw(self.surface)
+
+        if play_btn.is_clicked():
+            self.start()
+
+        # Set sound button
+        sound_btn = Button(
+            x=x_center_pos,
+            y=play_btn.icon_rect.y + play_btn.icon_rect.height + 60,
+            sizes=(75, 75),
+            icon=assets.DEACTIVE_SOUND_BUTTON
+            if self.is_muted
+            else assets.ACTIVE_SOUND_BUTTON,
+            centerized=True,
+        )
+
+        sound_btn.draw(self.surface)
+
+        if sound_btn.is_clicked():
+            self.toggle_mute()
+
+        # Set guide text
+        guide_text = Text(
+            font=font,
+            x=x_center_pos,
+            y=conf.SCREEN_HEIGHT - 50,
+            color=conf.MAIN_MENU_TEXT_COLOR,
+            centerized=True,
+            inverse_y_position=True,
+            texts=[
+                "Move to sides with arrow keys",
+                "Attack with spacebar",
+                "Pause with P",
+                "Toggle mute with M",
+            ],
+        )
+
+        guide_text.draw(self.surface)
 
     def draw_pause_prompt(self):
-        pass
+        # Define buttons
+        resume_btn = Button(x=0, y=0, icon=assets.PLAY_BUTTON, centerized=True)
+
+        sound_btn = Button(
+            x=0,
+            y=0,
+            icon=assets.DEACTIVE_SOUND_BUTTON
+            if self.is_muted
+            else assets.ACTIVE_SOUND_BUTTON,
+            centerized=True,
+        )
+
+        exit_btn = Button(x=0, y=0, icon=assets.HOME_BUTTON, centerized=True)
+
+        # Create prompt
+        prompt = Prompt(
+            assets.PROMPT_PAUSE_TITLE,
+            buttons=[resume_btn, sound_btn, exit_btn],
+            texts=["Press P to continue"],
+        )
+
+        # Draw prompt
+        prompt.draw(self.surface)
+
+        # Button events
+        if resume_btn.is_clicked():
+            self.resume()
+
+        if sound_btn.is_clicked():
+            self.toggle_mute()
+
+        if exit_btn.is_clicked():
+            self.finish()
 
     def draw_game_over_prompt(self):
-        pass
+        # Define buttons
+        retry_btn = Button(x=0, y=0, icon=assets.RETRY_BUTTON, centerized=True)
+
+        exit_btn = Button(x=0, y=0, icon=assets.HOME_BUTTON, centerized=True)
+
+        # Create prompt
+        prompt = Prompt(
+            assets.PROMPT_YOU_LOST_TITLE,
+            buttons=[retry_btn, exit_btn],
+            texts=[
+                "You are lost !",
+                f"Your score : {self.score}",
+                "Press R to retry",
+                "Press ESC to exit",
+            ],
+        )
+
+        # Draw prompt
+        prompt.draw(self.surface)
+
+        # Button events
+        if retry_btn.is_clicked():
+            self.start()
+
+        if exit_btn.is_clicked():
+            self.finish()
 
     def draw_platforms(self):
         # Increase the y factor by the game speed
@@ -328,17 +501,60 @@ class Game:
     def draw_game_bg(self):
         self.surface.blit(assets.GAME_BG, (0, 0))
 
-    def draw_lives(self):
-        pass
+    def draw_stats_ui(self):
+        font = pygame.font.Font(None, conf.GAME_STATS_ICON_SIZE)
 
-    def draw_kill_count(self):
-        pass
+        stats = [
+            {
+                "text": str(self.player.lives),
+                "icon": assets.LIVES_STATS_ICON,
+            },
+            {
+                "text": str(self.kills),
+                "icon": assets.KILLS_STATS_ICON,
+            },
+            {
+                "text": str(self.score),
+                "icon": assets.SCORE_STATS_ICON,
+            },
+            {
+                "text": str(self.coins),
+                "icon": assets.COINS_STATS_ICON,
+            },
+        ]
 
-    def draw_score(self):
-        pass
+        x_pos = 5
+        y_starting_pos = conf.SCREEN_HEIGHT - conf.GAME_STATS_ICON_SIZE
 
-    def draw_coins(self):
-        pass
+        for i, stat in enumerate(stats):
+            self.__draw_game_stats_ui(
+                font=font,
+                text=stat["text"],
+                icon=stat["icon"],
+                position=(
+                    x_pos,
+                    y_starting_pos + (-i * conf.GAME_STATS_ICON_SIZE * 1.3),
+                ),
+            )
+
+    def draw_ability_icon(self):
+        # This method will draw the ability icons that are activated
+
+        x_pos = conf.SCREEN_WIDTH - conf.GAME_STATS_ICON_SIZE - 5
+        y_starting_pos = conf.SCREEN_HEIGHT - conf.GAME_STATS_ICON_SIZE
+
+        for i, icon in enumerate(self.active_ability_icons):
+            self.__draw_ability_icon(
+                icon, (x_pos, y_starting_pos + (-i * conf.GAME_STATS_ICON_SIZE * 1.3))
+            )
+
+    def draw_pause_button(self):
+        pause_btn = Button(x=10, y=10, icon=assets.PAUSE_BUTTON, sizes=(65, 65))
+
+        pause_btn.draw(self.surface)
+
+        if pause_btn.is_clicked():
+            self.pause()
 
     def update_screen(self):
         if not self.is_started:
@@ -366,11 +582,12 @@ class Game:
             # Update game speed
             self.update_speed()
 
-            # Draw UI elements
-            self.draw_lives()
-            self.draw_score()
-            self.draw_kill_count()
-            self.draw_coins()
+            # Draw stats UI
+            self.draw_stats_ui()
+            self.draw_ability_icon()
+
+            # Draw pause button
+            self.draw_pause_button()
 
     def get_events(self):
         for event in pygame.event.get():
@@ -388,12 +605,16 @@ class Game:
                 self.player.disable_sprint()
 
             if event.type == pygame.KEYDOWN:
+                match event.key:
+                    case pygame.K_m:
+                        self.toggle_mute()
+
                 if not self.is_started:
                     match event.key:
                         case pygame.K_ESCAPE:
                             self.quit()
 
-                        case _:
+                        case pygame.K_SPACE:
                             self.start()
                 elif self.is_paused:
                     match event.key:
@@ -407,7 +628,7 @@ class Game:
                         case pygame.K_ESCAPE:
                             self.finish()
 
-                        case _:
+                        case pygame.K_r:
                             self.start()
                 else:
                     match event.key:
