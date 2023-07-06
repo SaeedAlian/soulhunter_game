@@ -9,8 +9,8 @@ from random import choices as random_choices
 
 class Game:
     SPRITES = pygame.sprite.Group()
-    MAXIMUM_SPRITES = 5
-    SPRITE_DISTANCE_FACTOR = 7
+    MAXIMUM_SPRITES = 1
+    SPRITE_DISTANCE_FACTOR = conf.MAX_SPRITES_DISTANCE_FACTOR
     SPRITE_CLASSES: list[Sprite] = [SingleBlock, DoubleBlock, Spike]
     SPRITE_DROP_WEIGHTS: list[float] = [
         c.DROP_CHANCE if c.DROP_CHANCE else 1 for c in SPRITE_CLASSES
