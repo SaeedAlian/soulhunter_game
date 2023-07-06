@@ -38,7 +38,7 @@ for i in range(1, 7):
         )
     )
 
-for i in range(1, 7):
+for i in range(1, 14):
     PLAYER_ATTACK_MODELS.append(
         transform.scale(
             image.load(f"assets/sprites/player/attack/{i}.png"),
