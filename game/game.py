@@ -152,3 +152,8 @@ class Game:
 
                     case pygame.K_SPACE:
                         self.player.attack()
+
+            if event.type == pygame.KEYUP:
+                match event.key:
+                    case pygame.K_SPACE:
+                        self.player.disable_attack()

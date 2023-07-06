@@ -17,6 +17,7 @@ class Player:
         self.hit_effect_index = 0
         self.is_jumping = False
         self.is_attacking = False
+        self.is_disabling_attack = False
         self.is_shielded = False
         self.is_sprinting = False
         self.is_hit = False
@@ -134,12 +135,16 @@ class Player:
     def attack(self):
         if not self.is_attacking:
             self.is_attacking = True
+            self.is_disabling_attack = False
             self.model_index = 0
+
+    def reset_attack(self):
+        self.is_attacking = False
+        self.model_index = 0
 
     def disable_attack(self):
         if self.is_attacking:
-            self.is_attacking = False
-            self.model_index = 0
+            self.is_disabling_attack = True
 
     def disable_jump(self):
         if self.is_jumping:
@@ -223,9 +228,9 @@ class Player:
             # in the models list
             if self.model_index >= len(self.models) - 1:
                 # disable attacking if he is attacking
-                # because the attacking animation is finished
-                if self.is_attacking:
-                    self.disable_attack()
+                # and wanting to disable it
+                if self.is_disabling_attack and self.is_attacking:
+                    self.reset_attack()
 
                 # otherwise reset the index
                 else:
