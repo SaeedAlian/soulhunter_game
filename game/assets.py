@@ -62,3 +62,13 @@ for i in range(1, 4):
             (conf.PLAYER_WIDTH, conf.PLAYER_HEIGHT),
         )
     )
+
+# Block models
+SINGLE_BLOCK_MODEL = transform.scale(
+    transform.rotate(image.load("assets/environment/block/single.png"), 90),
+    (conf.BLOCK_WIDTH, conf.BLOCK_HEIGHT),
+)
+DOUBLE_BLOCK_MODEL = transform.scale(
+    image.load("assets/environment/block/double.png"),
+    (conf.BLOCK_WIDTH * 2, conf.BLOCK_HEIGHT),
+)
