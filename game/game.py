@@ -8,7 +8,7 @@ class Game:
     def __init__(self, surface: pygame.Surface) -> None:
         self.surface = surface
         self.speed = conf.GAME_SPEED
-        self.player_jump_speed = self.speed * 2
+        self.player_jump_speed = self.speed * 3
         self.player = Player(self.player_jump_speed)
 
         # This variable can move the platforms in
