@@ -96,3 +96,53 @@ DEAD_BUSH_MODEL = transform.rotate(
     -90,
 )
 
+# Coin
+COIN_MODELS: list[Surface] = []
+
+for i in range(1, 9):
+    COIN_MODELS.append(
+        transform.scale(
+            image.load(f"assets/items/coin/{i}.png"),
+            (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+        )
+    )
+
+# Coin bag
+COIN_BAG_MODEL = transform.scale(
+    image.load(f"assets/items/coin_bag/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
+# Emerald
+EMERALD_MODEL = transform.scale(
+    image.load(f"assets/items/emerald/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
+# Ruby
+RUBY_MODEL = transform.scale(
+    image.load(f"assets/items/ruby/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
+# Sapphire
+SAPPHIRE_MODEL = transform.scale(
+    image.load(f"assets/items/sapphire/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
+# Sprint item
+SPRINT_ITEM_MODEL = transform.scale(
+    image.load(f"assets/items/sprint/1.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+
+# Heart
+FULL_HEART_MODEL = transform.scale(
+    image.load(f"assets/items/heart/full.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
+EMPTY_HEART_MODEL = transform.scale(
+    image.load(f"assets/items/heart/empty.png"),
+    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
+)
