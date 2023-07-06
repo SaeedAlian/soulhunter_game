@@ -189,6 +189,9 @@ class Game:
         self.player.reset(self.player_jump_speed)
         self.SPRITES.empty()
 
+        self.MAXIMUM_SPRITES = 1
+        self.SPRITE_DISTANCE_FACTOR = conf.MAX_SPRITES_DISTANCE_FACTOR
+
     def start(self):
         self.reset()
         self.is_started = True
