@@ -239,7 +239,7 @@ class Game:
             sprite.change_animation()
 
             # Collision check
-            if self.player.collision_rect.collidepoint((sprite.x, sprite.y)):
+            if self.player.collision_rect.colliderect(sprite.rect):
                 # If player attacked an enemy
                 if self.player.is_attacking and isinstance(sprite, Enemy):
                     # increment the score and kills if wasn't dead

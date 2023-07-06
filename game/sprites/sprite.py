@@ -24,8 +24,9 @@ class Sprite(sprite.Sprite):
         self.height = self.current_model.get_height()
         self.is_impacted = False
 
-        self.x = self.__set_x_pos()
-        self.y = -self.height * 2.0
+        self.rect = self.current_model.get_rect()
+
+        self.__set_positions(self.__set_x_pos(), -self.height * 2.0)
 
     @property
     def current_model(self):
@@ -50,6 +51,15 @@ class Sprite(sprite.Sprite):
             random() * (conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH * 2)
             + conf.PLATFORM_WIDTH
         )
+
+    def __set_positions(self, x: float = None, y: float = None):
+        if x:
+            self.x = x
+            self.rect.x = x
+
+        if y:
+            self.y = y
+            self.rect.y = y
 
     def __set_x_pos(self):
         # If the sprite is on the edges
@@ -77,23 +87,27 @@ class Sprite(sprite.Sprite):
         # If new height was not equal to the prev height
         if self.height != new_height:
             self.height = new_height
+            self.rect.height = new_height
 
         # If new width was not equal to the prev width
         if self.width != new_width:
             # reset the width
             self.width = new_width
+            self.rect.width = new_width
 
             # and if the sprite was on the right side
             if self.side == "right":
                 # change the x pos because it is the
                 # only position that depends on model width
-                self.x = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.width
+                self.__set_positions(
+                    x=conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.width
+                )
 
     def impact(self):
         self.is_impacted = True
 
     def update(self, game_speed: float):
-        self.y += game_speed + self.y_speed
+        self.__set_positions(y=self.y + game_speed + self.y_speed)
 
     def draw(self, surface: Surface):
         surface.blit(
