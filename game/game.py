@@ -1,12 +1,15 @@
 import pygame, sys
 from . import assets
 from config import conf
+from .player import Player
 
 
 class Game:
     def __init__(self, surface: pygame.Surface) -> None:
         self.surface = surface
         self.speed = conf.GAME_SPEED
+        self.player_jump_speed = self.speed * 2
+        self.player = Player(self.player_jump_speed)
 
         # This variable can move the platforms in
         # the y direction with the game speed
@@ -53,9 +56,25 @@ class Game:
         self.draw_game_bg()
         self.draw_platforms()
 
+        # Update player
+        self.player.draw(self.surface)
+        self.player.update()
+        self.player.change_animation(self.speed)
+
     def get_events(self):
         for event in pygame.event.get():
             # Quit
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                match event.key:
+                    case pygame.K_RIGHT:
+                        self.player.jump(to_right=True, to_left=False)
+
+                    case pygame.K_LEFT:
+                        self.player.jump(to_right=False, to_left=True)
+
+                    case pygame.K_SPACE:
+                        self.player.attack()
