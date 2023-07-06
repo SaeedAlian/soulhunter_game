@@ -22,6 +22,7 @@ class Sprite(sprite.Sprite):
         self.is_on_edges = is_on_edges
         self.width = self.current_model.get_width()
         self.height = self.current_model.get_height()
+        self.is_impacted = False
 
         self.x = self.__set_x_pos()
         self.y = -self.height * 2.0
@@ -87,6 +88,9 @@ class Sprite(sprite.Sprite):
                 # change the x pos because it is the
                 # only position that depends on model width
                 self.x = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.width
+
+    def impact(self):
+        self.is_impacted = True
 
     def update(self, game_speed: float):
         self.y += game_speed + self.y_speed

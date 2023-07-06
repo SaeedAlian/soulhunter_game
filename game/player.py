@@ -1,4 +1,4 @@
-from pygame import Surface, transform
+from pygame import Surface, transform, Rect
 from config import conf
 from .assets import (
     PLAYER_RUN_MODELS,
@@ -77,6 +77,42 @@ class Player:
     @property
     def jump_speed(self):
         return self.__jump_speed * 2 if self.is_sprinting else self.__jump_speed
+
+    @property
+    def collision_rect(self):
+        empty_space_width = (
+            conf.PLAYER_RIGHT_EMPTY_SPACE_PIXELS
+            * conf.PLAYER_WIDTH
+            / conf.PLAYER_FULL_WIDTH_MODEL_PIXELS
+        )
+
+        empty_space_height = (
+            0
+            if self.is_attacking
+            else (
+                conf.PLAYER_TOP_EMPTY_SPACE_PIXELS
+                * conf.PLAYER_HEIGHT
+                / conf.PLAYER_FULL_HEIGHT_MODEL_PIXELS
+            )
+        )
+
+        collision_rect = (
+            Rect(
+                self.rect.left + empty_space_width,
+                self.rect.top + empty_space_height,
+                self.rect.width - empty_space_width,
+                self.rect.height - empty_space_height,
+            )
+            if self.is_jumping and self.jump_dir == "left"
+            else Rect(
+                self.rect.left,
+                self.rect.top + empty_space_height,
+                self.rect.width - empty_space_width,
+                self.rect.height - empty_space_height,
+            )
+        )
+
+        return collision_rect
 
     def __rotate_model(self, model: Surface):
         return transform.flip(
@@ -170,11 +206,12 @@ class Player:
 
     def sprint(self):
         self.is_sprinting = True
-        self.shield()
 
     def disable_sprint(self):
         self.is_sprinting = False
-        self.disable_shield()
+
+    def reset(self, jump_speed: float):
+        self.__init__(jump_speed)
 
     def update(self, new_jump_speed: float = None):
         if new_jump_speed is not None:
