@@ -217,10 +217,6 @@ FULL_HEART_MODEL = transform.scale(
     image.load(f"assets/items/heart/full.png"),
     (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
 )
-EMPTY_HEART_MODEL = transform.scale(
-    image.load(f"assets/items/heart/empty.png"),
-    (conf.ITEM_WIDTH, conf.ITEM_HEIGHT),
-)
 
 # Bringer of Death
 BRINGER_OF_DEATH_MAIN_MODELS: list[Surface] = []
