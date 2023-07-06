@@ -3,15 +3,15 @@ from . import assets
 from config import conf
 from .player import Player
 from .sprites.sprite import Sprite
-from .sprites.obstacles import DoubleBlock, SingleBlock
-from random import choices as random_choices, random
+from .sprites.obstacles import DoubleBlock, SingleBlock, Spike
+from random import choices as random_choices
 
 
 class Game:
     SPRITES = pygame.sprite.Group()
     MAXIMUM_SPRITES = 5
     SPRITE_DISTANCE_FACTOR = 7
-    SPRITE_CLASSES: list[Sprite] = [SingleBlock, DoubleBlock]
+    SPRITE_CLASSES: list[Sprite] = [SingleBlock, DoubleBlock, Spike]
     SPRITE_DROP_WEIGHTS: list[float] = [
         c.DROP_CHANCE if c.DROP_CHANCE else 1 for c in SPRITE_CLASSES
     ]

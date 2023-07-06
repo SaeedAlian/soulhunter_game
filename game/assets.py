@@ -65,10 +65,24 @@ for i in range(1, 4):
 
 # Block models
 SINGLE_BLOCK_MODEL = transform.scale(
-    transform.rotate(image.load("assets/environment/block/single.png"), 90),
+    transform.rotate(image.load("assets/environment/block/single.png"), -90),
     (conf.BLOCK_WIDTH, conf.BLOCK_HEIGHT),
 )
 DOUBLE_BLOCK_MODEL = transform.scale(
     image.load("assets/environment/block/double.png"),
     (conf.BLOCK_WIDTH * 2, conf.BLOCK_HEIGHT),
 )
+
+# Spike models
+SPIKE_MODELS: list[Surface] = []
+
+for i in range(1, 7):
+    SPIKE_MODELS.append(
+        transform.rotate(
+            transform.scale(
+                image.load(f"assets/environment/spikes/{i}.png"),
+                (conf.SPIKE_WIDTH, conf.SPIKE_HEIGHT),
+            ),
+            -90,
+        )
+    )

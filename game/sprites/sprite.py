@@ -83,7 +83,7 @@ class Sprite(sprite.Sprite):
         # If it's on the edges then the x must be set from the
         # new rect width so we need to call __set_x_pos method
         # otherwise we set the new_x to the previous x position
-        self.rect.x = self.__set_x_pos() if self.is_on_edges else prev_x
+        self.rect.x = prev_x
 
         self.rect.y = prev_y
 
@@ -94,7 +94,7 @@ class Sprite(sprite.Sprite):
         surface.blit(
             transform.flip(
                 self.current_model,
-                self.side == "left",
+                self.side == "right",
                 False,
             ),
             self.rect,

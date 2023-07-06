@@ -1,8 +1,7 @@
 from .sprite import Sprite
 from pygame import Surface
 from config import conf
-from random import randint
-from ..assets import DOUBLE_BLOCK_MODEL, SINGLE_BLOCK_MODEL
+from ..assets import DOUBLE_BLOCK_MODEL, SINGLE_BLOCK_MODEL, SPIKE_MODELS
 
 
 class Obstacle(Sprite):
@@ -29,3 +28,10 @@ class DoubleBlock(Obstacle):
 
     def __init__(self):
         super().__init__([DOUBLE_BLOCK_MODEL])
+
+
+class Spike(Obstacle):
+    DROP_CHANCE = conf.SPIKE_DROP_CHANCE
+
+    def __init__(self):
+        super().__init__(SPIKE_MODELS, 0.1)
