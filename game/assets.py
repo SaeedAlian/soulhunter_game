@@ -51,7 +51,7 @@ PLAYER_HIT_EFFECTS: list[Surface] = []
 PLAYER_SHIELD_EFFECTS: list[Surface] = [
     transform.scale(
         image.load(f"assets/sprites/player/shield/1.png"),
-        (conf.PLAYER_WIDTH * 1.5, conf.PLAYER_HEIGHT * 1.5),
+        (conf.PLAYER_WIDTH, conf.PLAYER_HEIGHT),
     )
 ]
 

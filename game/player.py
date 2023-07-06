@@ -29,9 +29,14 @@ class Player:
 
         # Set the player position
         self.rect = self.current_model.get_rect()
-        self.right_pos = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.rect.width
+        self.right_pos = (
+            conf.SCREEN_WIDTH
+            - conf.PLATFORM_FLOOR_WIDTH
+            - self.rect.width
+            + conf.PLAYER_FOOT_MARGIN
+        )
 
-        self.left_pos = conf.PLATFORM_FLOOR_WIDTH
+        self.left_pos = conf.PLATFORM_FLOOR_WIDTH - conf.PLAYER_FOOT_MARGIN
 
         self.rect.y = conf.PLAYER_Y_POS
         self.rect.x = self.right_pos
@@ -88,12 +93,18 @@ class Player:
 
     def __draw_shield(self, surface: Surface):
         current_shield_model = self.__rotate_model(self.current_shield_effect)
-        current_shield_model_rect = current_shield_model.get_rect()
-        current_shield_model_rect.center = self.rect.center
+
+        x_pos = (
+            self.rect.x - conf.PLAYER_FOOT_MARGIN
+            if self.side == "left"
+            else self.rect.x + conf.PLAYER_FOOT_MARGIN
+        )
+
+        y_pos = self.rect.y + conf.PLAYER_FOOT_MARGIN
 
         surface.blit(
             current_shield_model,
-            current_shield_model_rect,
+            (x_pos, y_pos),
         )
 
     def __draw_hit(self, surface: Surface):
@@ -186,7 +197,7 @@ class Player:
 
         # Draw hit effect
         elif self.is_hit:
-            self.__draw_hit()
+            self.__draw_hit(surface)
 
         # Draw player
         else:
