@@ -29,10 +29,12 @@ class Player:
 
         # Set the player position
         self.rect = self.current_model.get_rect()
-        self.rect.center = (
-            conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH,
-            conf.PLAYER_Y_POS,
-        )
+        self.right_pos = conf.SCREEN_WIDTH - conf.PLATFORM_FLOOR_WIDTH - self.rect.width
+
+        self.left_pos = conf.PLATFORM_FLOOR_WIDTH
+
+        self.rect.y = conf.PLAYER_Y_POS
+        self.rect.x = self.right_pos
 
     @property
     def models(self):
@@ -60,9 +62,9 @@ class Player:
         # This property shows that the player is
         # on which side of platforms, the right or
         # the left
-        if self.rect.centerx <= conf.PLATFORM_WIDTH:
+        if self.rect.x <= self.left_pos:
             return "left"
-        elif self.rect.centerx >= conf.SCREEN_WIDTH - conf.PLATFORM_WIDTH:
+        elif self.rect.x >= self.right_pos:
             return "right"
         else:
             return "center"
@@ -135,13 +137,13 @@ class Player:
             # not on the left side
             if self.jump_dir == "left" and self.side != "left":
                 # then move left
-                self.rect.centerx -= self.jump_speed
+                self.rect.x -= self.jump_speed
 
             # or the jump direction is right and he is
             # not on the right side
             elif self.jump_dir == "right" and self.side != "right":
                 # then move right
-                self.rect.centerx += self.jump_speed
+                self.rect.x += self.jump_speed
 
             # otherwise
             else:
@@ -172,7 +174,11 @@ class Player:
         if len(self.models) > 1:
             # increase the model_index by a factor of
             # game speed
-            self.model_index += current_game_speed / 10
+            self.model_index += (
+                conf.PLAYER_ATTACK_SPEED
+                if self.is_attacking
+                else current_game_speed / 10
+            )
 
             # and if the index reaches the last element
             # in the models list
